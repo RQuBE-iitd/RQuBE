@@ -6,4 +6,7 @@ Thus We use query by example paradigm where the user provides an exemplar source
 (1) Infer the regular expression that characterizes the paths between the source and the destination, and
 (2) Identify nodes in the graph that are connected in a similar manner to the source as characterized by the regex inferred from the exemplar pair.
 
+## Datasets
+Datasets can be downloaded from here: https://drive.google.com/drive/folders/10odFg2fhUzrXc6symOcWQf9-abcW1n3k?usp=sharing
+
 ## Running experiments
