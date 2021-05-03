@@ -89,10 +89,7 @@ void horizonBWD(Graph *g,int dest,int horizon,unordered_map<int,set<vector<int>>
                     vector<int> path;
                     for(int j=1;j<i.size();j++){
                         path.push_back(g->nodes[i[j-1]]->fwdEdge[i[j]]);
-                        // cout<<path.back()<<" ";
                     }
-                //     for(auto j:i)
-                //         path.push_back(findLabel(g,j));
                     pathStrings[path]++;
                 }
             }
