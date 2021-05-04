@@ -448,22 +448,22 @@ int main(int argc, char *argv[])
 {
     char *edgeFile = argv[1];    // Edge File
     char *labelFile = argv[2];   // Frequent label file
-    char *attrFile = argv[3];    // Attribute/temp file
-    int src = atoi(argv[4]);     // Source Node
-    int dest = atoi(argv[5]);    // Destination Node
-    int horizon = atoi(argv[6]); // Path Length
+    int src = atoi(argv[3]);     // Source Node
+    int dest = atoi(argv[4]);    // Destination Node
+    int horizon = atoi(argv[5]); // Path Length
 
-    supp = atof(argv[7]);        // Support threshold
-    sample = atoi(argv[8]);      // z, samples to take in each iteration
-    r = atof(argv[9]);           // Retain percentage
-    dir =atoi(argv[10]);         // Directed/undirected
-    relDest = atoi(argv[11]);    // Top k ranks required
-    eta = atof(argv[12]);        // Eta threshold
-    d = stoi(argv[14]);          // Number of hops to be taken in NRWR
+    supp = atof(argv[6]);        // Support threshold
+    sample = atoi(argv[7]);      // z, samples to take in each iteration
+    r = atof(argv[8]);           // Retain percentage
+    dir =atoi(argv[9]);         // Directed/undirected
+    relDest = atoi(argv[10]);    // Top k ranks required
+    eta = atof(argv[11]);        // Eta threshold
+    d = stoi(argv[12]);          // Number of hops to be taken in NRWR
 
+    string attrFile = "include/files/att.txt";
     float walkLength;
     float numWalks;
-    Graph *newG = new Graph(edgeFile, labelFile, attrFile, dir);
+    Graph *newG = new Graph(edgeFile, labelFile, &attrFile[0], dir);
     Random *rands = new Random(newG->numEdges,1);
 
     ofstream out1("out/topk.csv");

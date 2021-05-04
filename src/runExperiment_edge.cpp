@@ -586,26 +586,27 @@ int main(int argc, char *argv[])
 {
     char *edgeFile = argv[1];
     char *labelFile = argv[2];
-    char *attrFile = argv[3];
-    string res = argv[4];
-    int st = atoi(argv[5]);
-    int en = atoi(argv[6]);
+    string res = argv[3];           // Ground truth directory
+    int st = atoi(argv[4]);         // Start pair number from ground turth (created using bbfs)
+    int en = atoi(argv[5]);         // End pair number from ground turth (created using bbfs)
 
-    supp = atof(argv[7]);
-    sample = atoi(argv[8]);
-    r = atof(argv[9]);
-    dir =atoi(argv[10]);
-    relDest = atoi(argv[11]);
-    eta = atof(argv[12]);
-    d = stoi(argv[13]);
-    int horizon = atoi(argv[14]);
-    string exp = argv[15];
+    // Algorithm parameters
+    supp = atof(argv[6]);
+    sample = atoi(argv[7]);
+    r = atof(argv[8]);
+    dir =atoi(argv[9]);
+    relDest = atoi(argv[10]);
+    eta = atof(argv[11]);
+    d = stoi(argv[12]);
+    int horizon = atoi(argv[13]);
+    string exp = argv[14];           // Experiment performing
 
+    string attrFile = "include/files/att.txt";
     int ITR=sample;
     int nn = en-st;
     float walkLength;
     float numWalks;
-    Graph *newG = new Graph(edgeFile, labelFile, attrFile, dir);
+    Graph *newG = new Graph(edgeFile, labelFile, &attrFile[0], dir);
     Random *rands = new Random(newG->numEdges, 1);
     double decimals=1000;
     double acc=0,time1=0,time2=0,time3=0,precision=0,totalVis=0,avgAnsSet=0,avgGt=0,pearson=0;

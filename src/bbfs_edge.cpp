@@ -283,15 +283,14 @@ int main(int argc, char *argv[])
     // Creates random exemplar pairs and stores them in a csv file almog with their neighbours and their actual confidence scores
     char *edgeFile = argv[1];
     char *labelFile = argv[2];
-    char *attrFile = argv[3];
-    string res = argv[4];              // Directory where to put these csv files
-    int st = atoi(argv[5]);            // start number of example to create
-    int en = atoi(argv[6]);            // end example number
-    int horizon = atoi(argv[7]);       // Path Length
+    string res = argv[3];              // Directory where to put these csv files
+    int st = atoi(argv[4]);            // start number of example to create
+    int en = atoi(argv[5]);            // end example number
+    int horizon = atoi(argv[6]);       // Path Length
 
-
+    string attrFile = "include/files/att.txt";
     int dir=1;      // Change horizon according to the length required in the forward and backward walk
-    Graph *newG = new Graph(edgeFile, labelFile, attrFile, dir);
+    Graph *newG = new Graph(edgeFile, labelFile, &attrFile[0], dir);
     cout<<newG->walkLength<<" "<<newG->numWalks<<endl;
     Random *rands = new Random(newG->numEdges, 1);
     srand(time(NULL));

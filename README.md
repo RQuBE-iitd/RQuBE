@@ -12,10 +12,18 @@ Datasets can be downloaded from here: https://drive.google.com/drive/folders/10o
 ## Running experiments
 To run a dataset with edge labels use x_edge file otherwise x_node file.
 
+### Running RQuBE for a query
+To compile: g++ -O3 src/RQuBE_(node/edge).cpp -o out
+
+To run: ./out path_to/edges.txt path_to/labels.txt source_node destination_node path_length support_threshold samples_to_take_in_each_iteration retain_percentage directed/undirected topK_ranks_required eta number_of_hops
+
+Example: ./out freebase/edges.txt freebase/labels.txt 1234 5678 4 0.3 2000 0.8 1 10 0.01 2
+It created 2 files (topk.csv and nfa.csv) where topk.csv contains the topk ranks found by the algo and nfa.csv stores the nfa learned by the BF algorithm.
+
 ### BBFS
 To compile: g++ -O3 src/bbfs_(node/edge).cpp -o out
 
-To run: ./out path_to/edges.txt path_to/freqlabels.txt path_to/att.txt start_file_number end_file_number path_length
+To run: ./out path_to/edges.txt path_to/labels.txt ground_truth_directory start_file_number end_file_number path_length
 
-Example: ./out freebase/edges.txt freebase/labels.txt freebase/freqlabels.txt freebase/att.txt groundTruth/freebase 0 2 4
+Example: ./out freebase/edges.txt freebase/labels.txt groundTruth/freebase 0 2 4
 This command creates file 0.csv,1.csv in grundTruth/freebase and each file contains the ground truth data for a randomly chosen pair.
