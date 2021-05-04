@@ -14,6 +14,7 @@ To run a dataset with edge labels use x_edge file otherwise x_node file.
 
 ### BBFS
 To compile: g++ -O3 src/bbfs_(node/edge).cpp -o out
+
 To run: ./out path_to/edges.txt path_to/freqlabels.txt path_to/att.txt start_file_number end_file_number path_length
 
 Example: ./out freebase/edges.txt freebase/labels.txt freebase/freqlabels.txt freebase/att.txt groundTruth/freebase 0 2 4
