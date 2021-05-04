@@ -18,6 +18,7 @@ To compile: g++ -O3 src/RQuBE_(node/edge).cpp -o out
 To run: ./out path_to/edges.txt path_to/labels.txt source_node destination_node path_length support_threshold samples_to_take_in_each_iteration retain_percentage directed/undirected topK_ranks_required eta number_of_hops
 
 Example: ./out freebase/edges.txt freebase/labels.txt 1234 5678 4 0.3 2000 0.8 1 10 0.01 2
+
 It created 2 files (topk.csv and nfa.csv) where topk.csv contains the topk ranks found by the algo and nfa.csv stores the nfa learned by the BF algorithm.
 
 ### BBFS
@@ -26,4 +27,16 @@ To compile: g++ -O3 src/bbfs_(node/edge).cpp -o out
 To run: ./out path_to/edges.txt path_to/labels.txt ground_truth_directory start_file_number end_file_number path_length
 
 Example: ./out freebase/edges.txt freebase/labels.txt groundTruth/freebase 0 2 4
-This command creates file 0.csv,1.csv in grundTruth/freebase and each file contains the ground truth data for a randomly chosen pair.
+
+Creates files 0.csv,1.csv in grundTruth/freebase and each file contains the ground truth data for a randomly chosen pair.
+
+### Running experiments
+To run the experiments it is necessary that we have created some example in the ground truth by bbfs for the calculation of the discussed metrics.
+
+To compile: g++ -O3 src/runExperiment_(node/edge).cpp -o out
+
+To run: ./out path_to/edges.txt path_to/labels.txt ground_truth_directory start_file_number end_file_number support_threshold samples_to_take_in_each_iteration retain_percentage directed/undirected topK_ranks_required eta number_of_hops path_length (supp/retain/k/z/eta/d)
+
+Example: ./out freebase/edges.txt freebase/labels.txt groundTruth/freebase 0 2 0.3 2000 0.8 1 10 0.01 2 4 supp
+
+Creates a single file with value.experiment_name given as output. For the above example 3.supp will be created which will store the value of metrics and time taken by the algorithm.
