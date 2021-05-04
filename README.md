@@ -13,3 +13,8 @@ Datasets can be downloaded from here: https://drive.google.com/drive/folders/10o
 To run a dataset with edge labels use x_edge file otherwise x_node file.
 
 ### BBFS
+To compile: g++ -O3 src/bbfs_(node/edge).cpp -o out
+To run: ./out path_to/edges.txt path_to/freqlabels.txt path_to/att.txt start_file_number end_file_number path_length
+
+Example: ./out freebase/edges.txt freebase/labels.txt freebase/freqlabels.txt freebase/att.txt groundTruth/freebase 0 2 4
+This command creates file 0.csv,1.csv in grundTruth/freebase and each file contains the ground truth data for a randomly chosen pair.
