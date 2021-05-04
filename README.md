@@ -30,7 +30,7 @@ Example: ./out freebase/edges.txt freebase/labels.txt groundTruth/freebase 0 2 4
 
 Creates files 0.csv,1.csv in grundTruth/freebase and each file contains the ground truth data for a randomly chosen pair.
 
-### Running experiments
+### Running experiments on values of parameters
 To run the experiments it is necessary that we have created some example in the ground truth by bbfs for the calculation of the discussed metrics.
 
 To compile: g++ -O3 src/runExperiment_(node/edge).cpp -o out
