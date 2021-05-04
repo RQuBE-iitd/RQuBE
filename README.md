@@ -10,3 +10,6 @@ Thus We use query by example paradigm where the user provides an exemplar source
 Datasets can be downloaded from here: https://drive.google.com/drive/folders/10odFg2fhUzrXc6symOcWQf9-abcW1n3k?usp=sharing
 
 ## Running experiments
+To run a dataset with edge labels use x_edge file otherwise x_node file.
+
+### BBFS
