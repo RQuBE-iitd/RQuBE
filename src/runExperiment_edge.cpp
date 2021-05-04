@@ -121,6 +121,29 @@ void horizonBWD(Graph *g,int dest,int horizon,unordered_map<int,set<vector<int>>
     // }
 }
 
+void initFSA( vector<vector<string>>& input, vector<vector<string>> &train,vector<vector<int>>& validation)
+{
+
+    int tail;
+    bool flag=1;
+	for(tail=maxStringLength;tail>1 && !validation.empty();tail--){
+        construct(train,tail,transition_table);
+        double acc=0;
+        for(auto j:validation)
+            if(isAccepted(transition_table,j,0,0))
+                acc++;
+        if((acc/validation.size())>=0.9){
+            flag=0;
+            break;
+        }
+        transition_table.clear();
+    }
+
+    transition_table.clear();
+    construct(input,tail,transition_table);
+
+}
+
 void nrwr(Graph* g,unordered_set<int>& vis_nodes,int src,int horizon,double tol=1e-5,int maxiter=1e6){
 
     vector<double> ranks(g->nodes.size(),0);
@@ -161,7 +184,7 @@ void nrwr(Graph* g,unordered_set<int>& vis_nodes,int src,int horizon,double tol=
             prevnorm = curnorm;
         }
         int prob = rand()%100;    // restart prob
-        if(prob>90 || l >= 2*horizon){
+        if(prob>90 || l >= horizon){
             state=0;
             node=src;
             l=0;
@@ -330,7 +353,7 @@ int findAnswerSet(Graph *g,int src,unordered_set<int>& vis_nodes,vector<pair<int
         vector<pair<int,double>> recommendedRankings;
         for(auto i:vis_nodes){
             map<vector<int>, int> pathStrings;
-            RandomPaths(g,i,horizon,fwd,pathStrings,paths[i],currSample);
+            RandomPaths(g,i,(horizon/2)+(horizon%2),fwd,pathStrings,paths[i],currSample);
             int acceptedCount=0;
             int totalCount=0;
             tr(pathStrings, j){
@@ -434,7 +457,7 @@ vector<double> metrics(Graph *g,int src,int dest,vector<pair<int, double>> &answ
     for(int i=0; i< (int)answerSet.size(); i++){
         if(m.find(answerSet[i].first)==m.end()){
             map<vector<int>,int> pathStrings;
-		    horizonBWD(g,answerSet[i].first,horizon,fwd,pathStrings);
+		    horizonBWD(g,answerSet[i].first,(horizon/2)+(horizon%2),fwd,pathStrings);
 		    int acceptedCount=0;
 		    int totalCount=0;
 		    for(auto j :pathStrings){
@@ -574,12 +597,12 @@ int main(int argc, char *argv[])
     dir =atoi(argv[10]);
     relDest = atoi(argv[11]);
     eta = atof(argv[12]);
-    string exp = argv[13];
-    d = stoi(argv[14]);
+    d = stoi(argv[13]);
+    int horizon = atoi(argv[14]);
+    string exp = argv[15];
 
     int ITR=sample;
     int nn = en-st;
-    int horizon=3;
     float walkLength;
     float numWalks;
     Graph *newG = new Graph(edgeFile, labelFile, attrFile, dir);
@@ -622,8 +645,8 @@ int main(int argc, char *argv[])
         auto start = chrono::system_clock::now();
         map<vector<int>,int> pathStrings;
         unordered_map<int,set<vector<int>>> fwd;
-        horizonFWD(newG,src,horizon,fwd);
-        horizonBWD(newG,dest,horizon,fwd,pathStrings);
+        horizonFWD(newG,src,(horizon/2),fwd);
+        horizonBWD(newG,dest,(horizon/2)+(horizon%2),fwd,pathStrings);
 
         vector<vector<string>> input,train;
         vector<vector<int>> validation;
@@ -649,8 +672,10 @@ int main(int argc, char *argv[])
             continue;
 
         // random_shuffle(v.begin(), v.end());
-        transition_table.clear();
-        construct(input,stoi(K),transition_table);
+        // transition_table.clear();
+        // construct(input,stoi(K),transition_table);
+        initFSA(input,train,validation);                                // Initialise nfa with 90% validation set acceptance
+
         auto end = std::chrono::system_clock::now();
         chrono::duration<double> elapsed_seconds = end-start;
         time1+=elapsed_seconds.count();
@@ -687,7 +712,7 @@ int main(int argc, char *argv[])
         end = std::chrono::system_clock::now();
         elapsed_seconds = end-start;
         avgAnsSet += answerSet.size();
-	time3+=elapsed_seconds.count();
+	    time3+=elapsed_seconds.count();
         cout<<"answer found "<<answerSet.size()<<endl;
 
 ////////////////////////////////////////////////////////TIMER END/////////////////////////////////////////////////////////////////////////

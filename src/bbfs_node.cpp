@@ -255,7 +255,7 @@ pair<double,int> initFSA(Graph *g,vector<vector<string>> &train,vector<vector<in
     int max_accepted_strings=0;
     for(int i=0; i<min(INT_MAX,(int)destinationsVec.size()); i++){
         map<vector<int>,int> pathStrings;
-        horizonBWD(g,destinationsVec[i].first,horizon,fwd,pathStrings);
+        horizonBWD(g,dest,(horizon/2)+(horizon%2),fwd,pathStrings);
 
         int acceptedCount=0;
         int totalCount=0;
@@ -293,9 +293,10 @@ int main(int argc, char *argv[])
     string res = argv[4];              // Directory where to put these csv files
     int st = atoi(argv[5]);            // start number of example to create
     int en = atoi(argv[6]);            // end example number
+    int horizon = atoi(argv[7]);
 
 
-    int dir=1,horizon=3;      // Change horizon according to the length required in the forward and backward walk
+    int dir=1;      // Change horizon according to the length required in the forward and backward walk
     Graph *newG = new Graph(edgeFile, labelFile, attrFile, dir);
     cout<<newG->walkLength<<" "<<newG->numWalks<<endl;
     Random *rands = new Random(newG->numEdges, 1);
@@ -314,8 +315,8 @@ int main(int argc, char *argv[])
         auto start = chrono::system_clock::now();
         map<vector<int>,int> pathStrings;
         unordered_map<int,set<vector<int>>> fwd;
-        horizonFWD(newG,src,horizon-1,fwd);
-        horizonBWD(newG,dest,horizon,fwd,pathStrings);
+        horizonFWD(newG,src,(horizon/2),fwd);
+        horizonBWD(newG,dest,(horizon/2)+(horizon%2),fwd,pathStrings);
         vector<vector<string>> input,train;
         vector<vector<int>> train_check,validation;
         int totalPaths=0,n=pathStrings.size();

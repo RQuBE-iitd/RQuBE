@@ -116,6 +116,7 @@ void horizonBWD(Graph *g,int dest,int horizon,unordered_map<int,set<vector<int>>
         }
     }
 }
+
 void initFSA( vector<vector<string>>& input, vector<vector<string>> &train,vector<vector<int>>& validation)
 {
 
@@ -187,7 +188,7 @@ void nrwr(Graph* g,unordered_set<int>& vis_nodes,int src,int horizon,double tol=
             prevnorm = curnorm;
         }
         int prob = rand()%100;    // restart prob
-        if(prob>90 || l >= 2*horizon){
+        if(prob>90 || l >= horizon){
             state=startStates[rand()%startStates.size()];
             node=src;
             l=0;
@@ -337,7 +338,6 @@ int findAnswerSet(Graph *g,int src,unordered_set<int>& vis_nodes,vector<pair<int
     currSample = max(currSample, support);
     minIter = max(minIter, support);
     unordered_map<int, set<vector<int>>> paths;
-    // unordered_set<int> lessSupport;
     unordered_map<int, int> acc_count;
     unordered_set<int> prev,curr;
     int iter =0;
@@ -346,7 +346,7 @@ int findAnswerSet(Graph *g,int src,unordered_set<int>& vis_nodes,vector<pair<int
         vector<pair<int,double>> recommendedRankings;
         for(auto i:vis_nodes){
             map<vector<int>, int> pathStrings;
-            RandomPaths(g,i,horizon,fwd,pathStrings,paths[i],currSample);
+            RandomPaths(g,i,(horizon/2)+(horizon%2),fwd,pathStrings,paths[i],currSample);
             int acceptedCount=0;
             int totalCount=0;
             tr(pathStrings, j){
@@ -360,41 +360,8 @@ int findAnswerSet(Graph *g,int src,unordered_set<int>& vis_nodes,vector<pair<int
                 int t = acc_count[i]/(totalCount*1.0) * decimals;
                 recommendedRankings.push_back({i,((double)t)/decimals});
             }
-            // else lessSupport.insert(i);
         }
 
-
-        // unordered_set<int> temp;
-        // if(iter>1){
-        //     for(auto i : lessSupport){
-        //         map<vector<int>, int> pathStrings;
-        //         RandomPaths(g,i,horizon,fwd,pathStrings,paths[i],currSample);
-        //         int acceptedCount=0;
-        //         int totalCount=0;
-        //         tr(pathStrings, j){
-        //             if(isAccepted(transition_table,j->first,0,0))
-        //                 acceptedCount += j->second;
-        //         }
-                
-        //         acc_count[i] += acceptedCount;
-        //         totalCount = paths[i].size();
-        //         if(acc_count[i] > support ){
-        //             int t = acc_count[i]/(totalCount*1.0) * decimals;
-        //             recommendedRankings.push_back({i,((double)t)/decimals});
-        //         }
-        //         else temp.insert(i);
-        //     }
-        //     lessSupport = temp;
-        // }
-
-        // cout<<lessSupport.size()<<" less"<<endl;
-
-        // if(recommendedRankings.empty()){
-        //     if(br>=2)
-        //         return iter;
-        //     br++;
-        //     continue;
-        // }
         sort(recommendedRankings.begin(),recommendedRankings.end(),[](pair<int,float> a,pair<int,float> b){
             return a.second>b.second;
         });
@@ -471,7 +438,6 @@ int findAnswerSet(Graph *g,int src,unordered_set<int>& vis_nodes,vector<pair<int
         currSample = max((int)(0.8*currSample) , minIter);
         prev=curr;
         curr= unordered_set<int>();
-        // cout<<vis_nodes.size()<<endl;
     }
     return iter;
 
@@ -491,7 +457,7 @@ vector<double> metrics(Graph *g,int src,int dest,vector<pair<int, double>> &answ
     for(int i=0; i< (int)answerSet.size(); i++){
         if(m.find(answerSet[i].first)==m.end()){
             map<vector<int>,int> pathStrings;
-		    horizonBWD(g,answerSet[i].first,horizon,fwd,pathStrings);
+		    horizonBWD(g,answerSet[i].first,(horizon/2)+(horizon%2),fwd,pathStrings);
 		    int acceptedCount=0;
 		    int totalCount=0;
 		    for(auto j :pathStrings){
@@ -632,11 +598,11 @@ int main(int argc, char *argv[])
     dir =atoi(argv[10]);
     relDest = atoi(argv[11]);
     eta = atof(argv[12]);
-    string exp = argv[13];           // Experiment performing
-    d = stoi(argv[14]);
-
+    d = stoi(argv[13]);
+    int horizon = atoi(argv[14]);
+    string exp = argv[15];           // Experiment performing
+    
     int nn = en-st;
-    int horizon=3;
     float walkLength;
     float numWalks;
     Graph *newG = new Graph(edgeFile, labelFile, attrFile, dir);
@@ -680,8 +646,8 @@ int main(int argc, char *argv[])
         auto start = chrono::system_clock::now();
         map<vector<int>,int> pathStrings;
         unordered_map<int,set<vector<int>>> fwd;
-        horizonFWD(newG,src,horizon,fwd);
-        horizonBWD(newG,dest,horizon,fwd,pathStrings);
+        horizonFWD(newG,src,(horizon/2),fwd);
+        horizonBWD(newG,dest,(horizon/2)+(horizon%2),fwd,pathStrings);
 
         vector<vector<string>> input,train;
         vector<vector<int>> validation;
