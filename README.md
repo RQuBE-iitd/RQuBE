@@ -22,7 +22,7 @@ Example: ./out freebase/edges.txt freebase/labels.txt 1234 5678 4 0.3 2000 0.8 1
 It created 2 files (topk.csv and nfa.csv) where topk.csv contains the topk ranks found by the algo and nfa.csv stores the nfa learned by the BF algorithm.
 
 ### BBFS
-Create a folder where you want to store the results of bbfs as shown below in the example.
+Create a folder where the results of bbfs will be stored as shown below in the example.
 
 To compile: g++ -O3 src/bbfs_(node/edge).cpp -o out
 
