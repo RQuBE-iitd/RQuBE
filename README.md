@@ -42,3 +42,6 @@ To run: ./out path_to/edges.txt path_to/labels.txt ground_truth_directory start_
 Example: ./out freebase/edges.txt freebase/labels.txt groundTruth/freebase 0 2 0.3 2000 0.8 1 10 0.01 2 4 supp
 
 Creates a single file with value.experiment_name given as output. For the above example 3.supp will be created which will store the value of metrics and time taken by the algorithm.
+
+## Survey of the BF Algorithm
+User survey graphs are available at https://1drv.ms/b/s!AoQBaOgKVpLvibpFtyrrL64fsb8czA?e=Q3A8p9
